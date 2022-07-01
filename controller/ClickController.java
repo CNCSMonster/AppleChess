@@ -1,12 +1,8 @@
 package controller;
 
-import java.util.Currency;
-import java.util.List;
 
-import model.BoardComponent;
 import model.BoardComponentColor;
 import model.BoardPoint;
-import model.Chess;
 import view.ChessBoard;
 
 public class ClickController {
@@ -33,15 +29,17 @@ public class ClickController {
         chessBoard.putChess(boardPoint.getX(), boardPoint.getY(),currentColor);
 
         //并翻转与它夹着的棋子
-        List<Chess> chesses=chessBoard.getClipChesses(boardPoint);
-        if(chesses==null||chesses.size()==0){
-            chessBoard.putEmptyPlace(boardPoint.getX(), boardPoint.getY());
-            chessBoard.repaint();
-            return;
-        }
-        for(Chess chess:chesses){
-            chess.turnUpSide();
-        }
+
+        //TODO ,获取落子
+        // List<Chess> chesses=chessBoard.getClipChesses(boardPoint);
+        // if(chesses==null||chesses.size()==0){
+        //     chessBoard.putEmptyPlace(boardPoint.getX(), boardPoint.getY());
+        //     chessBoard.repaint();
+        //     return;
+        // }
+        // for(Chess chess:chesses){
+        //     chess.turnUpSide();
+        // }
         chessBoard.repaint();   //操作完之后重绘制
         swapCurrentColor();
     }
@@ -49,5 +47,7 @@ public class ClickController {
     public void swapCurrentColor(){
         currentColor=(currentColor==BoardComponentColor.BLACK?BoardComponentColor.WHITE:BoardComponentColor.BLACK);
     }
+
+
 
 }

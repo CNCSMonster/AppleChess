@@ -1,0 +1,41 @@
+@startuml 游戏主要类的关系图
+
+' 对项目进行建模
+
+' 棋盘单位的最小部件
+
+class BoardComponent{
+    -boardPoint:BoardPoint      
+    #clickController:ClickController
+
+    +getBoardPoint():BoardPoint
+    +setBoardPoint(BoardPoint boardPoint):void
+}
+
+
+class Chess{
+    -chessColor:BoardComponentColor
+    -boardPoint:BoardPoint      
+    #clickController:ClickController
+
+    +getBoardPoint():BoardPoint
+    +setBoardPoint(BoardPoint boardPoint):void
+    +
+}
+
+class ClickController{
+
+}
+
+class ChessBoard{
+
+}
+
+
+
+
+
+
+
+
+@enduml

@@ -1,14 +1,11 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Event;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.plaf.basic.BasicTabbedPaneUI.MouseHandler;
 
 import controller.ClickController;
 import model.BoardComponent;
@@ -27,8 +24,8 @@ public class ChessBoard extends JPanel{
 
     @Override
     public void repaint() {
-        // TODO Auto-generated method stub
         super.repaint();
+
         
     }
 
@@ -124,145 +121,9 @@ public class ChessBoard extends JPanel{
     }
 
 
-    //获取某个位置的棋子以及他与其他位置的棋子之间夹着的棋子的列表
-    public List<Chess> getClipChesses(BoardPoint boardPoint){
-        if(!(boardComponents[boardPoint.getX()-1][boardPoint.getY()-1] instanceof Chess)){
-            return null;    //如果该位置不是棋子，返回null
-        }
-        List<Chess> out=new ArrayList<>();
-        
-        List<Chess> term=new ArrayList<>();
-
-        //总共四种夹方向，横竖各一种，斜着又两种，共四条线，要做8次检查
-        BoardComponentColor chessColor=((Chess)boardComponents[boardPoint.getX()-1][boardPoint.getY()-1]).getChessColor();
-
-        //往上找到最近的同色棋子的坐标，空格跳出
-        int i;
-        for(i=boardPoint.getY();i<numOfLines;i++){
-            if(boardComponents[boardPoint.getX()-1][i] instanceof Chess){
-                Chess chess=(Chess)boardComponents[boardPoint.getX()-1][i];
-                if(chess.getChessColor()==chessColor){
-                    break;
-                }else{
-                    term.add(chess);
-                    continue;
-                }
-            }
-            break;  //如果该位置不是棋子，应该是空格，则跳出循环
-        }
-        if(
-            i==numOfLines||
-            !(boardComponents[boardPoint.getX()-1][i] instanceof Chess)||
-            ((Chess)boardComponents[boardPoint.getX()-1][i]).getChessColor()!=chessColor
-
-        ){  //如果不是棋子,又或者棋子颜色不对
-            term.clear();
-        }else{
-            out.addAll(term);
-            term.clear();
-        }
+    
 
 
-
-        //往下找到最近的同色棋子坐标，空格跳出
-        for(i=boardPoint.getY()-2;i>=0;i--){
-            if(boardComponents[boardPoint.getX()-1][i] instanceof Chess){
-                Chess chess=(Chess)boardComponents[boardPoint.getX()-1][i];
-                if(chess.getChessColor()==chessColor){
-                    break;
-                }else{
-                    term.add(chess);
-                    continue;
-                }
-            }
-            break;  //如果该位置不是棋子，应该是空格，则跳出循环
-        }
-        if(
-            i==numOfLines||
-            !(boardComponents[boardPoint.getX()-1][i] instanceof Chess)||
-            ((Chess)boardComponents[boardPoint.getX()-1][i]).getChessColor()!=chessColor
-
-        ){  //如果不是棋子,又或者棋子颜色不对
-            term.clear();
-        }else{
-            out.addAll(term);
-            term.clear();
-        }
-
-        //往左找到最近的同色棋子坐标，空格跳出
-        for(i=boardPoint.getX()-2;i>=0;i--){
-            if(boardComponents[i][boardPoint.getY()-1] instanceof Chess){
-                Chess chess=(Chess)boardComponents[i][boardPoint.getY()-1];
-                if(chess.getChessColor()==chessColor){
-                    break;
-                }else{
-                    term.add(chess);
-                    continue;
-                }
-            }
-            break;  //如果该位置不是棋子，应该是空格，则跳出循环
-        }
-        //仅仅该位置是同色棋子时才可能有包夹的棋子
-        if(
-            i==numOfLines||
-            !(boardComponents[i][boardPoint.getY()-1] instanceof Chess)||
-            ((Chess)boardComponents[i][boardPoint.getY()-1]).getChessColor()!=chessColor
-
-        ){  //如果不是棋子,又或者棋子颜色不对
-            term.clear();
-        }else{
-            out.addAll(term);
-            term.clear();
-        }
-
-
-        //往右找到最近的同色棋子坐标，空格跳出
-        for(i=boardPoint.getX();i<numOfLines;i++){
-            if(boardComponents[i][boardPoint.getY()-1] instanceof Chess){
-                Chess chess=(Chess)boardComponents[i][boardPoint.getY()-1];
-                if(chess.getChessColor()==chessColor){
-                    break;
-                }else{
-                    term.add(chess);
-                    continue;
-                }
-            }
-            break;  //如果该位置不是棋子，应该是空格，则跳出循环
-        }
-        if(
-            i==numOfLines||
-            !(boardComponents[i][boardPoint.getY()-1] instanceof Chess)||
-            ((Chess)boardComponents[i][boardPoint.getY()-1]).getChessColor()!=chessColor
-
-        ){  //如果不是棋子,又或者棋子颜色不对
-            term.clear();
-        }else{
-            out.addAll(term);
-            term.clear();
-        }
-
-
-        //检查该点到左上，
-
-        //检查该点到右上
-
-
-        //检查该点到左下
-        
-
-        //检查该点到右下
-
-
-
-
-
-
-
-
-
-        return out;
-    }
-  
     public BoardComponent[][] getBoardComponents() {
         return boardComponents;
     }
@@ -277,6 +138,29 @@ public class ChessBoard extends JPanel{
         }
         return true;
     }
+
+
+    //判断如果落子在该处，会包夹的棋子
+    public List<Chess> getClipChesses(Chess chess){
+        List<Chess> chesses=new ArrayList<>();
+        //往八个方向搜索
+
+        return chesses;
+    }
+
+    //(xs,ys)为搜索的方向的方向向量
+    public List<Chess> sortClipChessesOneDirection(Chess chess,int xs,int ys){
+        List<Chess> chesses=new ArrayList<>();
+
+        //搜索的路径长度不会大于棋盘宽高
+        for(int i=0;i<numOfLines;i++){
+
+        }
+
+
+        return chesses;
+    }
+
 
     
 

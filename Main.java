@@ -1,7 +1,6 @@
 import javax.swing.JFrame;
 
 import view.ChessBoard;
-import java.awt.*;
 
 class Main extends JFrame{
 

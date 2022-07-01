@@ -3,7 +3,6 @@ package model;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.*;
-import java.awt.geom.*;
 
 import controller.ClickController;
 
@@ -12,20 +11,15 @@ public class Chess extends BoardComponent{
     //棋子需要保存棋子自身的颜色
     private BoardComponentColor chessColor;
 
-    
-
-
 
     public Chess(int boardX, int boardY, int size,BoardComponentColor chessColor,ClickController clickController) {
         super(boardX, boardY, size,clickController);
-        //TODO Auto-generated constructor stub
         this.chessColor=chessColor;
     }
 
 
     @Override
     protected void paintComponent(Graphics g) {
-        // TODO Auto-generated method stub
         super.paintComponent(g);
 
         //使用父中同名方法绘制了背景之后，接下来绘制的是棋子
@@ -45,6 +39,7 @@ public class Chess extends BoardComponent{
 
     public void setChessColor(BoardComponentColor chessColor) {
         this.chessColor = chessColor;
+
     }
 
     public BoardComponentColor getChessColor() {
@@ -53,7 +48,7 @@ public class Chess extends BoardComponent{
     
 
     //翻转棋子
-    public void turnUpSide(){
+    public void swapColor(){
         this.chessColor=(chessColor==BoardComponentColor.BLACK?BoardComponentColor.WHITE:BoardComponentColor.BLACK);
         repaint();
     }
