@@ -1,4 +1,5 @@
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import view.ChessBoard;
 
@@ -15,6 +16,8 @@ class Main extends JFrame{
     }
 
     public static void main(String[] args) {
-        new Main();
+        SwingUtilities.invokeLater(()->{
+            new Main();
+        });
     }
 }

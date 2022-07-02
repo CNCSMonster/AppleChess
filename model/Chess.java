@@ -16,6 +16,11 @@ public class Chess extends BoardComponent{
         super(boardX, boardY, size,clickController);
         this.chessColor=chessColor;
     }
+    
+    public Chess(BoardPoint boardPoint, int size,BoardComponentColor chessColor,ClickController clickController) {
+        super(boardPoint, size,clickController);
+        this.chessColor=chessColor;
+    }
 
 
     @Override

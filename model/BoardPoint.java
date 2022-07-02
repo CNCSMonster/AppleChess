@@ -1,6 +1,8 @@
 package model;
 
 
+
+//往右边是x，往下面是y,x从1开始，y也从1开始
 //对于棋盘基础部件在棋盘中的位置进行封装
 public class BoardPoint {
     private int x;

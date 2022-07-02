@@ -42,12 +42,17 @@ public class BoardComponent extends JComponent{
                 System.out.println("发生鼠标事件");
                 if(e.getID()==MouseEvent.MOUSE_PRESSED){
                     System.out.println("点击棋子:"+boardPoint);
-                    clickController.handleClick(boardPoint);    //把点击信息传给棋盘控制者
+                    if(clickController!=null) clickController.handleClick(boardPoint);    //把点击信息传给棋盘控制者
                 }
             }
         });
 
     }
+
+    public BoardComponent(BoardPoint boardPoint,int size,ClickController clickController){
+        this(boardPoint.getX(),boardPoint.getY(),size,clickController);
+    }
+    
 
     @Override
     protected void paintComponent(Graphics g) {
