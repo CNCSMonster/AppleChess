@@ -7,7 +7,7 @@ import javax.swing.JComponent;
 import javax.swing.border.Border;
 import javax.swing.event.MouseInputAdapter;
 
-import controller.ClickController;
+import controller.BaseClickController;
 
 import java.awt.*;
 
@@ -17,11 +17,11 @@ public class BoardComponent extends JComponent{
     // private int size;   //棋盘中棋子或者空格组件的实际大小
     private Border border;
     
-    protected ClickController clickController;    //棋子需要一个控制者的引用，它需要通知控制者
+    protected BaseClickController clickController;    //棋子需要一个控制者的引用，它需要通知控制者
 
     private BoardComponentColor bgColor=BoardComponentColor.BACKGROUND; //背景颜色
 
-    public BoardComponent(int boardX,int boardY,int size,ClickController clickController){
+    public BoardComponent(int boardX,int boardY,int size,BaseClickController clickController){
         super();
         border=BorderFactory.createLineBorder(Color.BLACK);
         setBorder(border);
@@ -49,7 +49,7 @@ public class BoardComponent extends JComponent{
 
     }
 
-    public BoardComponent(BoardPoint boardPoint,int size,ClickController clickController){
+    public BoardComponent(BoardPoint boardPoint,int size,BaseClickController clickController){
         this(boardPoint.getX(),boardPoint.getY(),size,clickController);
     }
     

@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import controller.ClickController;
+import controller.BaseClickController;
 import model.BoardComponent;
 import model.BoardComponentColor;
 import model.BoardPoint;
@@ -20,8 +20,9 @@ public class ChessBoard extends JPanel{
     private static int boardSize;
     private static int boardComponentSize;
     BoardComponent[][] boardComponents=new BoardComponent[numOfLines][numOfLines];
-    private ClickController clickController;
+    private BaseClickController clickController;
 
+    private BoardComponentColor currentColor=BoardComponentColor.BLACK;
     private int numOfWhiteChesses=0;
     private int numOfBlackChesse=0;
 
@@ -37,6 +38,8 @@ public class ChessBoard extends JPanel{
         //设置初始棋子数量
         numOfBlackChesse=0;
         numOfWhiteChesses=0;
+        //初始化开始棋手
+        currentColor=BoardComponentColor.BLACK;
         //初始化棋盘棋子和空格组件
         initEmptyPlace();
         initChess();
@@ -55,7 +58,7 @@ public class ChessBoard extends JPanel{
         setLayout(null);
         //设置可见性为真
         setVisible(true);
-        clickController =new ClickController(this);
+        clickController =new BaseClickController(this);
         initBoard();
     }
 
@@ -261,5 +264,13 @@ public class ChessBoard extends JPanel{
         return numOfBlackChesse;
     }
 
+    public BoardComponentColor getCurrentColor() {
+        return currentColor;
+    }
+
+    public void swapCurrentColor(){
+        //交换当前下棋者角色
+        currentColor=((currentColor==BoardComponentColor.BLACK)?BoardComponentColor.WHITE:BoardComponentColor.BLACK);
+    }
 
 }

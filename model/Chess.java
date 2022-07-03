@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.*;
 
-import controller.ClickController;
+import controller.BaseClickController;
 
 public class Chess extends BoardComponent{
 
@@ -12,12 +12,12 @@ public class Chess extends BoardComponent{
     private BoardComponentColor chessColor;
 
 
-    public Chess(int boardX, int boardY, int size,BoardComponentColor chessColor,ClickController clickController) {
+    public Chess(int boardX, int boardY, int size,BoardComponentColor chessColor,BaseClickController clickController) {
         super(boardX, boardY, size,clickController);
         this.chessColor=chessColor;
     }
     
-    public Chess(BoardPoint boardPoint, int size,BoardComponentColor chessColor,ClickController clickController) {
+    public Chess(BoardPoint boardPoint, int size,BoardComponentColor chessColor,BaseClickController clickController) {
         super(boardPoint, size,clickController);
         this.chessColor=chessColor;
     }

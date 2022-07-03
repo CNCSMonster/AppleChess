@@ -1,12 +1,13 @@
 package model;
-import controller.ClickController;
+import java.io.Serializable;
 
-public class EmptyPlace extends BoardComponent{
+import controller.BaseClickController;
 
-    public EmptyPlace(int boardX, int boardY,int size,ClickController clickController) {
+public class EmptyPlace extends BoardComponent {
+
+    public EmptyPlace(int boardX, int boardY,int size,BaseClickController clickController) {
         super(boardX, boardY,size,clickController);
     }
-    
     
 
 
