@@ -23,35 +23,23 @@ public class ClickController {
     //处理点击事件
     public void handleClick(BoardPoint boardPoint){
         //判断该位置是否可以下棋
-        //然后判断当前该颜色是否还能落子
-        if(!chessBoard.ifAvailableColor(currentColor)){
-            JOptionPane.showMessageDialog(chessBoard,currentColor+"没有翻棋机会，自动切换行棋方!");
+        //如果该位置无空落子，则不反应
+        if(!chessBoard.isAvailablePoint(boardPoint)){
             return;
         }
-
-        //如果该位置已经有棋了,不能下
-        if(!chessBoard.ifAvailablePoint(boardPoint)){
-            System.out.println(boardPoint+"已经有棋了");
-            return ;    //如果不能落子，直接退出
-        }
-
-
-        Chess chess=new Chess(boardPoint.getX(),boardPoint.getY(),1,currentColor,this);
-        List<Chess> chesses=chessBoard.getClipChesses(chess);
-        //如果没有办法捕获棋子,则不能下
-        if(chesses==null||chesses.size()==0){
-            System.out.println(boardPoint+"处落子不能翻棋，所以不能下");
+        List<BoardPoint> boardPoints=chessBoard.getClipBoardPoints(boardPoint, currentColor);
+        //如果该位置如果落子的话，无法翻棋，则不反应
+        if(boardPoints==null||boardPoints.size()==0){
             return;
         }
-        //否则下棋，并翻转包夹的棋子
-        chessBoard.putChess(boardPoint.getX(),boardPoint.getY(), currentColor);
-        for(Chess chess2:chesses){
-            chess2.swapColor();
+        //否则，下棋
+        chessBoard.putChess(boardPoint.getX(), boardPoint.getY(), currentColor);
+        for(BoardPoint boardPoint2:boardPoints){
+            if(boardPoint2!=null) chessBoard.putChess(boardPoint2.getX(), boardPoint2.getY(), currentColor);
         }
         chessBoard.repaint();   //操作完之后重绘制
         swapCurrentColor();
-
-        //判断是否游戏结束!
+        //每次下棋后判断是否游戏结束!
         //如果游戏结束了，判断得分和胜负
         if(chessBoard.isGameOver()){
             int nb=chessBoard.getNumOfBlackChesse();
@@ -71,6 +59,14 @@ public class ClickController {
             }
             show="黑棋"+nb+"子，白棋"+nw+"子"+show;
             JOptionPane.showMessageDialog(chessBoard, show);
+            return;
+        }
+        //然后判断切换后的颜色是否无子可下
+        if(!chessBoard.ifAvailableColor(currentColor)){
+            String toShow=currentColor+"方无子可下";
+            swapCurrentColor();
+            toShow+=",轮到"+currentColor+"下棋!";
+            JOptionPane.showMessageDialog(chessBoard,toShow);
         }
 
     }

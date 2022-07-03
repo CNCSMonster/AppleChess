@@ -1,0 +1,59 @@
+//判断如果落子在该处，会包夹的棋子
+    public List<BoardPoint> getClipBoardPointes(BoardPoint boardpoint){
+        List<BoardPoint> boardpointes=new ArrayList<>();
+        //往八个方向搜索
+
+        //往下搜索
+        boardpointes.addAll(sortClipBoardPointesOneDirection(boardpoint, 0, 1));
+
+        //往上搜索
+        boardpointes.addAll(sortClipBoardPointesOneDirection(boardpoint, 0, -1));
+
+        //往左搜索
+        boardpointes.addAll(sortClipBoardPointesOneDirection(boardpoint, -1, 0));
+        
+        //往右搜索
+        boardpointes.addAll(sortClipBoardPointesOneDirection(boardpoint, 1, 0));
+
+        //往左上搜索
+        boardpointes.addAll(sortClipBoardPointesOneDirection(boardpoint, -1, -1));
+
+        //往右上搜索
+        boardpointes.addAll(sortClipBoardPointesOneDirection(boardpoint, 1, -1));
+
+        //往左下搜索
+        boardpointes.addAll(sortClipBoardPointesOneDirection(boardpoint, -1, 1));
+
+        //往右下搜索
+        boardpointes.addAll(sortClipBoardPointesOneDirection(boardpoint, 1, 1));
+        return boardpointes;
+    }
+
+
+    //(xs,ys)为搜索的方向的方向向量
+    public List<BoardPoint> sortClipBoardPointesOneDirection(BoardPoint boardpoint,int xs,int ys){
+        List<BoardPoint> boardpointes=new ArrayList<>();
+        int x=boardpoint.getBoardPoint().getX();
+        int y=boardpoint.getBoardPoint().getY();
+        int i;
+        //搜索的路径长度不会大于棋盘宽高,找到空格或者下一个棋子为止
+        for(i=1;x+i*xs>0&&x+i*xs<=numOfLines&&y+i*ys>0&&y+i*ys<=numOfLines;i++){
+            if(boardComponents[x+i*xs-1][y+i*ys-1] instanceof BoardPoint
+            &&((BoardPoint)boardComponents[x+i*xs-1][y+i*ys-1]).getBoardPointColor()!=boardpoint.getBoardPointColor()
+            ){
+                boardpointes.add((BoardPoint)boardComponents[x+i*xs-1][y+i*ys-1]);
+            }
+            else{
+                break;
+            }
+        }
+        //如果搜索到边界而退出搜索的，那么没有没有可翻转的棋子
+        if(
+            x+i*xs==0||x+i*xs==numOfLines+1
+            ||y+i*ys==0||y+i*ys==numOfLines+1
+        )
+            boardpointes.clear();
+        else if(boardComponents[x+i*xs-1][y+i*ys-1] instanceof EmptyPlace)
+            boardpointes.clear();
+        return boardpointes;
+    }
