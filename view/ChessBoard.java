@@ -273,4 +273,64 @@ public class ChessBoard extends JPanel{
         currentColor=((currentColor==BoardComponentColor.BLACK)?BoardComponentColor.WHITE:BoardComponentColor.BLACK);
     }
 
+
+    //把棋局转化为一个字符串
+    @Override
+    public String toString() {
+        //用一个三进制数来表示棋盘的状态
+        //0表示空格，1表示黑棋，2表示白棋
+        //因为一个long只有64位，不够表示棋盘64个位置的所有棋子
+        //所以结果用long数组表示，一个long存储32位数据
+        
+        /*
+         * 棋盘的棋子排列顺序：
+         * 1 2 3 。。。8
+         * 9 10 11 。。。16
+         * 
+         * 
+         * 
+         */
+        //计算最多要使用数组的数量
+        int numOfPoints=numOfLines*numOfLines;
+        int size=numOfPoints%32==0?numOfPoints/32:numOfPoints/32+1;
+        //定义合适大小的long数组
+        long toS[]=new long[size];
+        int ordOfToS=0; //记录当前使用的long在toS数组中的下标
+        int curSize=0;  //用来记录当前使用的long已经记录的信息的位数
+        int weight=1;  //权重
+        int base=3; //基数
+
+
+        for(int i=0;i<numOfLines;i++){
+            for(int j=0;j<numOfLines;j++){
+                if(
+                    boardComponents[i][j]!=null
+                    &&boardComponents[i][j] instanceof Chess
+                ){
+                    toS[ordOfToS]+=((((Chess)boardComponents[i][j]).getChessColor()==BoardComponentColor.BLACK)?1:2)*weight;
+                }
+                curSize++;
+                weight*=base;
+                //判断当前是否更新到尽头,如果是，启动新的数组
+                if(curSize==32){
+                    curSize=0;
+                    weight=1;
+                    ordOfToS++;
+                }
+            }
+        }
+        String out="";
+        for(int i=0;i<size-1;i++){
+            out+=toS[i]+" ";
+        }
+        out+=toS[size-1];
+        return out;
+    }
+
+
+    public static void main(String[] args) {
+        System.out.println(new ChessBoard(100).toString());
+    }
+
+
 }
