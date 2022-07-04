@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.lang.reflect.Executable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -280,7 +281,7 @@ public class ChessBoard extends JPanel{
         //用一个三进制数来表示棋盘的状态
         //0表示空格，1表示黑棋，2表示白棋
         //因为一个long只有64位，不够表示棋盘64个位置的所有棋子
-        //所以结果用long数组表示，一个long存储32位数据
+        //所以结果用long数组表示，一个long存储16位数据
         
         /*
          * 棋盘的棋子排列顺序：
@@ -292,14 +293,14 @@ public class ChessBoard extends JPanel{
          */
         //计算最多要使用数组的数量
         int numOfPoints=numOfLines*numOfLines;
-        int size=numOfPoints%32==0?numOfPoints/32:numOfPoints/32+1;
+        int pointsPerLong=16;
+        int numOfLongs=numOfPoints%pointsPerLong==0?numOfPoints/pointsPerLong:numOfPoints/pointsPerLong+1;
         //定义合适大小的long数组
-        long toS[]=new long[size];
+        long toS[]=new long[numOfLongs];
         int ordOfToS=0; //记录当前使用的long在toS数组中的下标
         int curSize=0;  //用来记录当前使用的long已经记录的信息的位数
         int weight=1;  //权重
         int base=3; //基数
-
 
         for(int i=0;i<numOfLines;i++){
             for(int j=0;j<numOfLines;j++){
@@ -312,7 +313,7 @@ public class ChessBoard extends JPanel{
                 curSize++;
                 weight*=base;
                 //判断当前是否更新到尽头,如果是，启动新的数组
-                if(curSize==32){
+                if(curSize==pointsPerLong){
                     curSize=0;
                     weight=1;
                     ordOfToS++;
@@ -320,16 +321,81 @@ public class ChessBoard extends JPanel{
             }
         }
         String out="";
-        for(int i=0;i<size-1;i++){
-            out+=toS[i]+" ";
+        for(int i=0;i<numOfLongs-1;i++){
+            out+=toS[i]+"_";
         }
-        out+=toS[size-1];
+        out+=toS[numOfLongs-1];
         return out;
     }
 
 
-    public static void main(String[] args) {
-        System.out.println(new ChessBoard(100).toString());
+
+    //如果输入的字符串是合法的记录棋局信息的字符串,则根据该信息生成棋盘对象
+    public static ChessBoard valueOf(String string,int size) throws Exception{
+        //取出两个整数
+        ChessBoard chessBoard=new ChessBoard(size);
+        String[] sa=string.split("_");
+
+        //计算需要的long数量
+        int numOfPoints=numOfLines*numOfLines;
+        int pointsPerLong=16;
+        int numOfLongs=numOfPoints%pointsPerLong==0?numOfPoints/pointsPerLong:numOfPoints/pointsPerLong+1;
+
+        //比较从字符串中取出的long数量是否符合要求，如果不符合要求
+        if(sa.length!=numOfLongs)
+            throw new Exception("不是合法的棋局字符串");
+        long[] la=new long[numOfLongs];
+        for(int i=0;i<numOfLongs;i++){
+            try {
+                la[i]=Long.valueOf(sa[i]);
+            } catch (Exception e) {
+                throw new Exception("不是合法的棋局信息");
+            }
+        }
+        //根据读取到的字符串来获取棋盘文件
+        int ordOfLa=0; //记录当前使用的long在toS数组中的下标
+        int curSize=0;  //用来记录当前使用的long已经记录的信息的位数
+        int weight=1;  //权重
+        int base=3; //基数
+        try {
+            for(int i=0;i<numOfLines;i++){
+                for(int j=0;j<numOfLines;j++){
+                    int coe=(int)((la[ordOfLa]/weight)%base);
+                    switch(coe){
+                        case 0:
+                            chessBoard.putEmptyPlace(i+1, j+1);
+                        break;
+                        case 1:
+                            chessBoard.putChess(i+1, j+1, BoardComponentColor.BLACK);
+                        break;
+                        case 2:
+                            chessBoard.putChess(i+1, j+1, BoardComponentColor.WHITE);
+                        break;
+                        default:
+                        throw new Exception("不是合法的棋局信息");
+                    }
+                    curSize++;
+                    weight*=base;
+                    //判断当前是否更新到尽头,如果是，启动新的数组
+                    if(curSize==pointsPerLong){
+                        curSize=0;
+                        weight=1;
+                        ordOfLa++;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("不是合法的棋局信息");
+        }
+        return chessBoard;
+    }
+
+    public static void main(String[] args) throws Exception {
+        String old=new ChessBoard(10).toString();
+        System.out.println(old);
+        ChessBoard chessBoard=ChessBoard.valueOf(old, 10);
+       
+        System.out.println(chessBoard.toString());
     }
 
 
