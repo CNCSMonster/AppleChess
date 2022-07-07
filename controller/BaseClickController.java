@@ -8,6 +8,10 @@ import javax.swing.JOptionPane;
 import model.BoardPoint;
 import view.ChessBoard;
 
+
+/*
+ * 该控制者用于双人对战
+ */
 public class BaseClickController {
     private ChessBoard chessBoard;
 
@@ -69,7 +73,7 @@ public class BaseClickController {
     }
 
 
-
+    
         
 
 

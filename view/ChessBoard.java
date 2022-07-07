@@ -394,9 +394,7 @@ public class ChessBoard extends JPanel{
         String old=new ChessBoard(10).toString();
         System.out.println(old);
         ChessBoard chessBoard=ChessBoard.valueOf(old, 10);
-       
         System.out.println(chessBoard.toString());
     }
-
 
 }

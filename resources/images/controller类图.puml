@@ -1,0 +1,41 @@
+@startuml
+
+
+class BaseClickController{
+
+}
+
+
+abstract class Player{
+    #playerColor:BoardComponentColor
+    #chessBoard:ChessBoard
+
+    +{abstract} play():void
+    +{abstract} stop():void
+}
+
+class AiPlayer{
+    #playerColor:BoardComponentColor
+    #chessBoard:ChessBoard
+    +play():void
+    +stop():void
+}
+
+class HumanPlayer{
+    #playerColor:BoardComponentColor
+    #chessBoard:ChessBoard
+    +play():void
+    +stop():void
+}
+
+Player-->BaseClickController
+
+AiPlayer--|>Player
+
+HumanPlayer--|>Player
+
+
+
+
+
+@enduml
