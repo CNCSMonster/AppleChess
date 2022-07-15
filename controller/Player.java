@@ -39,8 +39,8 @@ public abstract class Player {
                 synchronized(chessBoard){
                     if(chessBoard.isGameOver()) break;
                     if(chessBoard.getCurrentColor()!=playerColor) continue;
+                    singleStep();
                 }
-                if(chessBoard.getCurrentColor()==playerColor) singleStep();
             }
         }).start();
     }

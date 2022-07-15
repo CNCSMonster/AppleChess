@@ -19,7 +19,7 @@ public class HumanPlayer extends Player{
     public void singleStep() {
         //让棋盘处于可以点击状态
         chessBoard.setEnabled(true);
-        chessBoard.notifyAll();
+        // chessBoard.notifyAll();
         //等待一定的时间等待人类作出反应
         while(true){
             //如果人类作出了操作棋盘颜色改变则退出棋盘

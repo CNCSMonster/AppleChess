@@ -19,7 +19,7 @@ class Main extends JFrame{
     public Main(){
         setBounds(100,100,700,700);
         ChessBoard chessBoard=new ChessBoard(560);
-        Player whitePlayer=new HumanPlayer(whiteColor, chessBoard);
+        Player whitePlayer=new AIPlayer(whiteColor, chessBoard,new RandomStrategy());
         Player blackPlayer=new AIPlayer(blackColor, chessBoard,new RandomStrategy());
         whitePlayer.play();
         blackPlayer.play();

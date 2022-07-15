@@ -15,17 +15,16 @@ public class AIPlayer extends Player{
 
     
     //棋手单走一步的行为
-    public void singleStep(){
-        synchronized(chessBoard){
-            if(aiStrategy==null) return;
-            BoardPoint boardPoint=aiStrategy.getStep(chessBoard);
-            controller.handleClick(boardPoint);
-            try {
-                Thread.sleep(1500);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+    public void singleStep() {
+        if (aiStrategy == null)
+            return;
+        BoardPoint boardPoint = aiStrategy.getStep(chessBoard);
+        controller.handleClick(boardPoint);
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
