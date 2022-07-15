@@ -10,7 +10,7 @@ import view.ChessBoard;
  * 如果能够占边，就在能够占边的走法中随机选一个
  * 否则在能够吃子的走法中选一个
  */
-public class LFStrategy implements AIStrategy{
+public class LocationFirstStrategy implements AIStrategy{
 
    
 

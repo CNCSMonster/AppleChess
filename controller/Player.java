@@ -4,7 +4,7 @@ import model.BoardComponentColor;
 import view.ChessBoard;
 
 /*
- * 玩家
+ * 玩家角色基础类型，总共两种:人类玩家和ai玩家
  */
 public abstract class Player {
     
@@ -20,14 +20,17 @@ public abstract class Player {
     //中止下棋标志
     private Boolean ifStop=false;
 
-    public Player(BoardComponentColor playeColor,ChessBoard chessBoard){
-        this.playerColor=playeColor;
+  
+
+    public Player(BoardComponentColor playerColor,ChessBoard chessBoard){
+        this.playerColor=playerColor;
         this.chessBoard=chessBoard;
         controller=new BaseClickController(chessBoard);
     }
 
     //玩家开始观察棋盘下棋
     public void play(){
+        ifStop=false;
         new Thread(()->{
             while(true){
                 synchronized(ifStop){
@@ -35,11 +38,9 @@ public abstract class Player {
                 }
                 synchronized(chessBoard){
                     if(chessBoard.isGameOver()) break;
-                    if(chessBoard.getCurrentColor()!=playerColor){
-                        continue;
-                    }
-                    singleStep();
+                    if(chessBoard.getCurrentColor()!=playerColor) continue;
                 }
+                if(chessBoard.getCurrentColor()==playerColor) singleStep();
             }
         }).start();
     }
@@ -51,9 +52,8 @@ public abstract class Player {
         }
     }
 
-   
     //棋手单走一步的行为
     public abstract void singleStep();
     
-
+    
 }

@@ -1,0 +1,35 @@
+@startuml
+
+left to right direction
+
+Class AIPlayer{
+
+}
+
+
+
+interface AIStrategy{
+    +{abstract}getStep(ChessBoard chessBoard):BoardPoint
+}
+
+class RandomStrategy{
+    +getStep(ChessBoard chessBoard):BoardPoint
+}
+
+class LocationFirstStrategy{
+    +getStep(ChessBoard chessBoard):BoardPoint
+}
+
+class SwapFirstStrategy{
+    +getStep(ChessBoard chessBoard):BoardPoint
+}
+
+
+AIStrategy <|.. RandomStrategy
+AIStrategy <|.. LocationFirstStrategy
+AIStrategy <|.. SwapFirstStrategy
+
+AIPlayer ..>AIStrategy
+
+
+@enduml

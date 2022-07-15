@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.lang.reflect.Executable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -329,7 +328,6 @@ public class ChessBoard extends JPanel{
     }
 
 
-
     //如果输入的字符串是合法的记录棋局信息的字符串,则根据该信息生成棋盘对象
     public static ChessBoard valueOf(String string,int size) throws Exception{
         //取出两个整数
@@ -389,6 +387,26 @@ public class ChessBoard extends JPanel{
         }
         return chessBoard;
     }
+
+    //获取当前棋盘上能够自由走的位置
+    public List<BoardPoint> getAvailablePoints(){
+        List<BoardPoint> out=new ArrayList<>();
+        BoardComponentColor chessColor=getCurrentColor();
+        for(int i=0;i<numOfLines;i++){
+            for(int j=0;j<numOfLines;j++){
+                BoardPoint boardPoint=new BoardPoint(i+1, j+1);
+                if(isAvailablePoint(boardPoint)){
+                    List<BoardPoint> boardPoints=getClipBoardPoints(boardPoint,chessColor);
+                    if(boardPoints!=null&&boardPoints.size()!=0)
+                        out.add(boardPoint);
+                }   
+            }
+        }
+        return out;
+    }
+
+
+
 
     public static void main(String[] args) throws Exception {
         String old=new ChessBoard(10).toString();

@@ -10,7 +10,7 @@ import view.ChessBoard;
  * 
  * 
  */
-public class SFStrategy implements AIStrategy{
+public class SwapFirstStrategy implements AIStrategy{
 
     @Override
     public BoardPoint getStep(ChessBoard chessBoard) {

@@ -28,7 +28,7 @@ public class HumanPlayer extends Player{
             }
             //否则睡眠30ms
             try {
-                Thread.sleep(30);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -37,12 +37,9 @@ public class HumanPlayer extends Player{
     }
 
    
-
-    
-    
-
-    
-
+    public static void main(String[] args) {
+        
+    }
     
     
 }

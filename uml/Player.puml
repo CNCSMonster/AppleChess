@@ -1,0 +1,48 @@
+@startuml
+
+abstract class Player{
+    #playerColor:BoardComponentColor
+    #controller:BaseClickController
+    #chessBoard:ChessBoard
+    -ifStop:boolean
+
+'构造器不能是抽象的.但是抽象类的构造器要么在定义匿名内部类的时候使用，要么被子类的构造器覆盖后才能使用
+    +Player(BoardComponentColor playerColor,ChessBoard chessBoard)
+    +play():void
+    +stop():void
+    +{abstract}singleStep():void
+
+}
+
+class AIPlayer{
+    #playerColor:BoardComponentColor
+    #controller:BaseClickController
+    #chessBoard:ChessBoard
+    -aiStrategy:AIStragegy
+
+
+    +Player(BoardComponentColor playerColor,ChessBoard chessBoard,AIStrategy aiStrategy)
+    +play():void
+    +stop():void
+    +singleStep():void
+}
+class HumanPlayer{
+    #playerColor:BoardComponentColor
+    #controller:BaseClickController
+    #chessBoard:ChessBoard
+
+
+    +Player(BoardComponentColor playerColor,ChessBoard chessBoard)
+    +play():void
+    +stop():void
+    +singleStep():void
+}
+
+AIPlayer ..|>Player
+HumanPlayer..|>Player
+
+Player<|..AIPlayer
+Player<|..HumanPlayer
+
+
+@enduml
