@@ -16,7 +16,7 @@ import model.EmptyPlace;
 
 public class ChessBoard extends JPanel{
 
-    private static final int numOfLines=8;
+    public static final int numOfLines=8;
     private static int boardSize;
     private static int boardComponentSize;
     BoardComponent[][] boardComponents=new BoardComponent[numOfLines][numOfLines];
@@ -62,7 +62,8 @@ public class ChessBoard extends JPanel{
         initBoard();
     }
 
-  
+    
+
     //用来适应窗口大小变化
     public void setSize(int size){
         this.setSize(size, size);
@@ -405,7 +406,7 @@ public class ChessBoard extends JPanel{
         return out;
     }
 
-
+    
 
 
     public static void main(String[] args) throws Exception {

@@ -4,7 +4,9 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.text.PlainDocument;
 
+import aistrategy.LocationFirstStrategy;
 import aistrategy.RandomStrategy;
+import aistrategy.SwapFirstStrategy;
 import controller.AIPlayer;
 import controller.HumanPlayer;
 import controller.Player;
@@ -19,8 +21,8 @@ class Main extends JFrame{
     public Main(){
         setBounds(100,100,700,700);
         ChessBoard chessBoard=new ChessBoard(560);
-        Player whitePlayer=new AIPlayer(whiteColor, chessBoard,new RandomStrategy());
-        Player blackPlayer=new AIPlayer(blackColor, chessBoard,new RandomStrategy());
+        Player whitePlayer=new AIPlayer(whiteColor, chessBoard,new SwapFirstStrategy());
+        Player blackPlayer=new AIPlayer(blackColor, chessBoard,new LocationFirstStrategy());
         whitePlayer.play();
         blackPlayer.play();
         setLayout(null);

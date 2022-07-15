@@ -1,5 +1,9 @@
 package aistrategy;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import model.BoardComponentColor;
 import model.BoardPoint;
 import view.ChessBoard;
 
@@ -14,8 +18,27 @@ public class SwapFirstStrategy implements AIStrategy{
 
     @Override
     public BoardPoint getStep(ChessBoard chessBoard) {
-        // TODO Auto-generated method stub
-        return null;
+        List<BoardPoint> term=new ArrayList<>();
+        List<BoardPoint> points=chessBoard.getAvailablePoints();
+        //统计能够翻转的棋子最多的
+        BoardComponentColor currentColor=chessBoard.getCurrentColor();
+        int len=0;
+        for(BoardPoint boardPoint:points){
+            List<BoardPoint> clipPoints=chessBoard.getClipBoardPoints(boardPoint, currentColor);
+            int curLen=clipPoints.size();
+            if(
+               curLen>len
+            ){
+                len=curLen;
+                term.clear();
+                term.add(boardPoint);
+            }
+            else if(curLen==len){
+                term.add(boardPoint);
+            }
+        }
+        int index=(int)(Math.random()*term.size());
+        return term.get(index);
     }
     
 }
