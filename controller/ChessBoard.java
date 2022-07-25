@@ -1,8 +1,9 @@
-package view;
+package controller;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.sql.rowset.spi.SyncResolver;
 import javax.swing.BorderFactory;
@@ -10,9 +11,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import controller.BaseClickController;
-import controller.HumanPlayer;
-import controller.Player;
 import model.BoardComponent;
 import model.BoardComponentColor;
 import model.BoardPoint;
@@ -26,9 +24,8 @@ public class ChessBoard extends JPanel{
     private static int boardComponentSize;
     BoardComponent[][] boardComponents=new BoardComponent[numOfLines][numOfLines];
     private BaseClickController clickController;
+    private List<String> boardVersions=new ArrayList<>();
     
-    //保存棋盘信息
-    private List<String> steps=new ArrayList<>();
 
     private BoardComponentColor currentColor=BoardComponentColor.BLACK;
     private int numOfWhiteChesses=0;
@@ -51,11 +48,12 @@ public class ChessBoard extends JPanel{
         //初始化棋盘棋子和空格组件
         initEmptyPlace();
         initChess();
-        //初始化棋盘走棋记录，第一个记录是初始棋盘，不可回退，
-        steps.add(toString());
-
+        boardVersions.add(toString());  //初始棋局版本为开始时的棋局信息
         repaint();
     }
+
+
+
 
     public ChessBoard(int size){
         //初始化棋盘
@@ -277,6 +275,23 @@ public class ChessBoard extends JPanel{
         return numOfBlackChesse;
     }
 
+    //增加版本信息
+    public void addVersion(String string){
+        boardVersions.add(string);
+    }
+
+    //获取上一步,如果没有上一步就返回null
+    public BoardPoint lastStep(){
+        int numOfVersions=boardVersions.size();
+        if(numOfVersions<=1) return null;
+        //
+        String curVersion=boardVersions.get(numOfVersions-1);
+        String lastVersion=boardVersions.get(numOfVersions-2);
+        //把两个棋局信息转化为棋盘比较
+        //TODO 等待优化
+        
+    }
+
     public BoardComponentColor getCurrentColor() {
         return currentColor;
     }
@@ -341,6 +356,47 @@ public class ChessBoard extends JPanel{
             out+=toS[i]+"_";
         }
         out+=toS[numOfLongs-1];
+        return out;
+    }
+
+    //私有方法，用来将棋局字符串转为矩阵形式
+    private static int[][] parseArr(String string){
+        int[][] out=new int[numOfLines][numOfLines];
+        ChessBoard chessBoard=new ChessBoard(size);
+        String[] sa=string.split("_");
+
+        //计算需要的long数量
+        int numOfPoints=numOfLines*numOfLines;
+        int pointsPerLong=16;
+        int numOfLongs=numOfPoints%pointsPerLong==0?numOfPoints/pointsPerLong:numOfPoints/pointsPerLong+1;
+
+        //比较从字符串中取出的long数量是否符合要求，如果不符合要求
+        if(sa.length!=numOfLongs)
+            throw new Exception("不是合法的棋局字符串");
+        long[] la=new long[numOfLongs];
+        for(int i=0;i<numOfLongs;i++){
+            try {
+                la[i]=Long.valueOf(sa[i]);
+            } catch (Exception e) {
+                throw new Exception("不是合法的棋局信息");
+            }
+        }
+        //根据读取到的字符串来获取棋盘文件
+        int ordOfLa=0; //记录当前使用的long在toS数组中的下标
+        int curSize=0;  //用来记录当前使用的long已经记录的信息的位数
+        int weight=1;  //权重
+        int base=3; //基数
+        try {
+            for(int i=0;i<numOfLines;i++){
+                for(int j=0;j<numOfLines;j++){
+                    int coe=(int)((la[ordOfLa]/weight)%base);
+                    out[i][j]=coe;
+                    
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("不是合法的棋局信息");
+        }
         return out;
     }
 

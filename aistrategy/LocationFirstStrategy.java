@@ -3,9 +3,9 @@ package aistrategy;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.ChessBoard;
 import model.BoardComponentColor;
 import model.BoardPoint;
-import view.ChessBoard;
 
 /*
  * 地理位置优先策略

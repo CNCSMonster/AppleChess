@@ -3,7 +3,6 @@ package controller;
 import aistrategy.AIStrategy;
 import model.BoardComponentColor;
 import model.BoardPoint;
-import view.ChessBoard;
 
 public class AIPlayer extends Player{
     private AIStrategy aiStrategy;

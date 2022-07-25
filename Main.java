@@ -8,10 +8,10 @@ import aistrategy.LocationFirstStrategy;
 import aistrategy.RandomStrategy;
 import aistrategy.SwapFirstStrategy;
 import controller.AIPlayer;
+import controller.ChessBoard;
 import controller.HumanPlayer;
 import controller.Player;
 import model.BoardComponentColor;
-import view.ChessBoard;
 
 class Main extends JFrame{
     BoardComponentColor whiteColor=BoardComponentColor.WHITE;

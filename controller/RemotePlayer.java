@@ -10,7 +10,6 @@ import java.util.concurrent.ExecutionException;
 
 import model.BoardComponentColor;
 import model.BoardPoint;
-import view.ChessBoard;
 
 public class RemotePlayer extends Player{
     private Socket socket;

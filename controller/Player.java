@@ -4,7 +4,6 @@ import java.util.List;
 
 import model.BoardComponentColor;
 import model.BoardPoint;
-import view.ChessBoard;
 
 /*
  * 玩家角色基础类型，总共两种:人类玩家和ai玩家

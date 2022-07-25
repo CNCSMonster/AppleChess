@@ -1,8 +1,6 @@
 import java.lang.reflect.Method;
-import view.ChessBoard;
-/*
- * 该工具类用来快速查看一个类的所有方法
- */
+
+import controller.ChessBoard;
 
 public class CheckMethodOfClass {
     

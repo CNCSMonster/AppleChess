@@ -5,10 +5,10 @@ import java.net.Socket;
 
 import javax.swing.JFrame;
 
+import controller.ChessBoard;
 import controller.Player;
 import controller.RemotePlayer;
 import model.BoardComponentColor;
-import view.ChessBoard;
 
 public class Client {
 

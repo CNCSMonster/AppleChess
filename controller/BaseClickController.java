@@ -6,7 +6,6 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import model.BoardPoint;
-import view.ChessBoard;
 
 
 /*

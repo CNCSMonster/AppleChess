@@ -1,7 +1,6 @@
 package controller;
 
 import model.BoardComponentColor;
-import view.ChessBoard;
 
 public class LocalPlayer extends Player{
     //localPlayer使
@@ -15,7 +14,6 @@ public class LocalPlayer extends Player{
             this.chessBoard=player.chessBoard;
             this.controller=player.controller;
             this.playerColor=player.playerColor;
-
         } else
             try {
                 throw new Exception("wrong in LocalPlayer Constructor");
@@ -34,6 +32,8 @@ public class LocalPlayer extends Player{
     public void singleStep() {
         // TODO Auto-generated method stub
         player.singleStep();
+        //TODO 获取上一步棋，保存在棋盘中
+
     }
     
 }
