@@ -289,7 +289,7 @@ public class ChessBoard extends JPanel{
         String lastVersion=boardVersions.get(numOfVersions-2);
         //把两个棋局信息转化为棋盘比较
         //TODO 等待优化
-        
+        return null;
     }
 
     public BoardComponentColor getCurrentColor() {
@@ -360,9 +360,8 @@ public class ChessBoard extends JPanel{
     }
 
     //私有方法，用来将棋局字符串转为矩阵形式
-    private static int[][] parseArr(String string){
+    private static int[][] parseChessBoardModel(String string){
         int[][] out=new int[numOfLines][numOfLines];
-        ChessBoard chessBoard=new ChessBoard(size);
         String[] sa=string.split("_");
 
         //计算需要的long数量
@@ -370,15 +369,15 @@ public class ChessBoard extends JPanel{
         int pointsPerLong=16;
         int numOfLongs=numOfPoints%pointsPerLong==0?numOfPoints/pointsPerLong:numOfPoints/pointsPerLong+1;
 
-        //比较从字符串中取出的long数量是否符合要求，如果不符合要求
+        //比较从字符串中取出的long数量是否符合要求，如果不符合要求返回null
         if(sa.length!=numOfLongs)
-            throw new Exception("不是合法的棋局字符串");
+            return null;
         long[] la=new long[numOfLongs];
         for(int i=0;i<numOfLongs;i++){
             try {
                 la[i]=Long.valueOf(sa[i]);
             } catch (Exception e) {
-                throw new Exception("不是合法的棋局信息");
+                return null;
             }
         }
         //根据读取到的字符串来获取棋盘文件
@@ -389,13 +388,19 @@ public class ChessBoard extends JPanel{
         try {
             for(int i=0;i<numOfLines;i++){
                 for(int j=0;j<numOfLines;j++){
-                    int coe=(int)((la[ordOfLa]/weight)%base);
-                    out[i][j]=coe;
-                    
+                    out[i][j]=(int)((la[ordOfLa]/weight)%base);
+                    curSize++;
+                    weight*=base;
+                    //判断当前是否更新到尽头,如果是，启动新的数组
+                    if(curSize==pointsPerLong){
+                        curSize=0;
+                        weight=1;
+                        ordOfLa++;
+                    }
                 }
             }
         } catch (Exception e) {
-            throw new Exception("不是合法的棋局信息");
+            return null;
         }
         return out;
     }
@@ -411,34 +416,12 @@ public class ChessBoard extends JPanel{
     public static ChessBoard valueOf(String string,int size) throws Exception{
         //取出两个整数
         ChessBoard chessBoard=new ChessBoard(size);
-        String[] sa=string.split("_");
-
-        //计算需要的long数量
-        int numOfPoints=numOfLines*numOfLines;
-        int pointsPerLong=16;
-        int numOfLongs=numOfPoints%pointsPerLong==0?numOfPoints/pointsPerLong:numOfPoints/pointsPerLong+1;
-
-        //比较从字符串中取出的long数量是否符合要求，如果不符合要求
-        if(sa.length!=numOfLongs)
-            throw new Exception("不是合法的棋局字符串");
-        long[] la=new long[numOfLongs];
-        for(int i=0;i<numOfLongs;i++){
-            try {
-                la[i]=Long.valueOf(sa[i]);
-            } catch (Exception e) {
-                throw new Exception("不是合法的棋局信息");
-            }
-        }
-        //根据读取到的字符串来获取棋盘文件
-        int ordOfLa=0; //记录当前使用的long在toS数组中的下标
-        int curSize=0;  //用来记录当前使用的long已经记录的信息的位数
-        int weight=1;  //权重
-        int base=3; //基数
+        int[][] chessBoardModel=parseChessBoardModel(string);
+        if(chessBoardModel==null) return null;
         try {
             for(int i=0;i<numOfLines;i++){
                 for(int j=0;j<numOfLines;j++){
-                    int coe=(int)((la[ordOfLa]/weight)%base);
-                    switch(coe){
+                    switch(chessBoardModel[i][j]){
                         case 0:
                             chessBoard.putEmptyPlace(i+1, j+1);
                         break;
@@ -450,14 +433,6 @@ public class ChessBoard extends JPanel{
                         break;
                         default:
                         throw new Exception("不是合法的棋局信息");
-                    }
-                    curSize++;
-                    weight*=base;
-                    //判断当前是否更新到尽头,如果是，启动新的数组
-                    if(curSize==pointsPerLong){
-                        curSize=0;
-                        weight=1;
-                        ordOfLa++;
                     }
                 }
             }
@@ -478,34 +453,12 @@ public class ChessBoard extends JPanel{
         //然后按照信息要求转化成指定形式
         //取出两个整数
         setSize(size);
-        String[] sa=string.split("_");
-
-        //计算需要的long数量
-        int numOfPoints=numOfLines*numOfLines;
-        int pointsPerLong=16;
-        int numOfLongs=numOfPoints%pointsPerLong==0?numOfPoints/pointsPerLong:numOfPoints/pointsPerLong+1;
-
-        //比较从字符串中取出的long数量是否符合要求，如果不符合要求
-        if(sa.length!=numOfLongs)
-            throw new Exception("不是合法的棋局字符串");
-        long[] la=new long[numOfLongs];
-        for(int i=0;i<numOfLongs;i++){
-            try {
-                la[i]=Long.valueOf(sa[i]);
-            } catch (Exception e) {
-                throw new Exception("不是合法的棋局信息");
-            }
-        }
-        //根据读取到的字符串来获取棋盘文件
-        int ordOfLa=0; //记录当前使用的long在toS数组中的下标
-        int curSize=0;  //用来记录当前使用的long已经记录的信息的位数
-        int weight=1;  //权重
-        int base=3; //基数
+        int[][] chessBoardModel=parseChessBoardModel(string);
+        if(chessBoardModel==null) throw new Exception("wrong input string of chessBoard");
         try {
             for(int i=0;i<numOfLines;i++){
                 for(int j=0;j<numOfLines;j++){
-                    int coe=(int)((la[ordOfLa]/weight)%base);
-                    switch(coe){
+                    switch(chessBoardModel[i][j]){
                         case 0:
                             putEmptyPlace(i+1, j+1);
                         break;
@@ -517,14 +470,6 @@ public class ChessBoard extends JPanel{
                         break;
                         default:
                         throw new Exception("不是合法的棋局信息");
-                    }
-                    curSize++;
-                    weight*=base;
-                    //判断当前是否更新到尽头,如果是，启动新的数组
-                    if(curSize==pointsPerLong){
-                        curSize=0;
-                        weight=1;
-                        ordOfLa++;
                     }
                 }
             }
