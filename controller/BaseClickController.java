@@ -10,7 +10,8 @@ import view.ChessBoard;
 
 
 /*
- * 该控制者用于双人对战
+ * 该控制者用于双人对战，
+ * 也可以作为其他对战的基础
  */
 public class BaseClickController {
     private ChessBoard chessBoard;

@@ -1,5 +1,10 @@
 @startuml
 
+
+class BaseClickController{
+
+}
+
 abstract class Player{
     #playerColor:BoardComponentColor
     #controller:BaseClickController
@@ -38,11 +43,13 @@ class HumanPlayer{
     +singleStep():void
 }
 
-AIPlayer ..|>Player
-HumanPlayer..|>Player
+' BaseClickController和Player之间有组合关联关系，
+' BaseClickController是Player的部分，部分离开整体可以存在
+BaseClickController --o Player
 
-Player<|..AIPlayer
-Player<|..HumanPlayer
+Player<|--AIPlayer
+Player<|--HumanPlayer
+
 
 
 @enduml
