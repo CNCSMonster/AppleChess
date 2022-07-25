@@ -1,12 +1,16 @@
 package controller;
 
+import java.util.List;
+
 import model.BoardComponentColor;
+import model.BoardPoint;
 import view.ChessBoard;
 
 /*
  * 玩家角色基础类型，总共两种:人类玩家和ai玩家
  */
 public abstract class Player {
+
     
     //棋手的阵营，或者说棋手所执棋子的颜色
     protected BoardComponentColor playerColor;
@@ -20,7 +24,9 @@ public abstract class Player {
     //中止下棋标志
     private Boolean ifStop=false;
 
-  
+    public Player(){
+        
+    }
 
     public Player(BoardComponentColor playerColor,ChessBoard chessBoard){
         this.playerColor=playerColor;

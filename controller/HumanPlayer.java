@@ -1,7 +1,6 @@
 package controller;
 
 import model.BoardComponentColor;
-import model.BoardPoint;
 import view.ChessBoard;
 
 public class HumanPlayer extends Player{

@@ -25,7 +25,7 @@ class Main extends JFrame{
         Player blackPlayer=new HumanPlayer(blackColor, chessBoard);
         whitePlayer.play();
         blackPlayer.play();
-        setLayout(null);
+        // setLayout(null);
         add(chessBoard);
         setVisible(true);
         

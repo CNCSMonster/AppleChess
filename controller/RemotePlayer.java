@@ -1,9 +1,15 @@
 package controller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.concurrent.ExecutionException;
 
 import model.BoardComponentColor;
+import model.BoardPoint;
 import view.ChessBoard;
 
 public class RemotePlayer extends Player{
@@ -30,10 +36,20 @@ public class RemotePlayer extends Player{
     @Override
     public void singleStep() {
         // TODO Auto-generated method stub
-        //远程玩家需要封锁棋盘，防止被本地触发
-
-
-
+        try {
+            //远程玩家下棋的时候禁止本地人类玩家操作，尤其是通过点击事件操作
+            //通过对chessBoard的锁禁止本地的电脑玩家操作
+            chessBoard.setEnabled(false);
+            InputStream inputStream=socket.getInputStream();
+            InputStreamReader ipsr=new InputStreamReader(inputStream);
+            BufferedReader bfr=new BufferedReader(ipsr);
+            String s=bfr.readLine();
+            BoardPoint boardPoint=BoardPoint.valueOf(s);
+            controller.handleClick(boardPoint);
+            socket.shutdownInput();
+        } catch (Exception e) {
+            //
+        }
     }
     
 }

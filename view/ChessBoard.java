@@ -4,10 +4,15 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.rowset.spi.SyncResolver;
 import javax.swing.BorderFactory;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import controller.BaseClickController;
+import controller.HumanPlayer;
+import controller.Player;
 import model.BoardComponent;
 import model.BoardComponentColor;
 import model.BoardPoint;
@@ -21,6 +26,9 @@ public class ChessBoard extends JPanel{
     private static int boardComponentSize;
     BoardComponent[][] boardComponents=new BoardComponent[numOfLines][numOfLines];
     private BaseClickController clickController;
+    
+    //保存棋盘信息
+    private List<String> steps=new ArrayList<>();
 
     private BoardComponentColor currentColor=BoardComponentColor.BLACK;
     private int numOfWhiteChesses=0;
@@ -43,6 +51,9 @@ public class ChessBoard extends JPanel{
         //初始化棋盘棋子和空格组件
         initEmptyPlace();
         initChess();
+        //初始化棋盘走棋记录，第一个记录是初始棋盘，不可回退，
+        steps.add(toString());
+
         repaint();
     }
 
@@ -64,9 +75,10 @@ public class ChessBoard extends JPanel{
 
     
 
-    //用来适应窗口大小变化
+    //用来适应窗口大小变化,棋盘大小改变后每个棋子的大小也都要改变
     public void setSize(int size){
         this.setSize(size, size);
+        boardSize=size;
         boardComponentSize=size/numOfLines;
         for(BoardComponent[] bcs:boardComponents){
             if(bcs==null) continue;
@@ -269,6 +281,10 @@ public class ChessBoard extends JPanel{
         return currentColor;
     }
 
+    public void setCurrentColor(BoardComponentColor currentColor) {
+        this.currentColor = currentColor;
+    }
+
     public void swapCurrentColor(){
         //交换当前下棋者角色
         currentColor=((currentColor==BoardComponentColor.BLACK)?BoardComponentColor.WHITE:BoardComponentColor.BLACK);
@@ -329,7 +345,13 @@ public class ChessBoard extends JPanel{
     }
 
 
-    //如果输入的字符串是合法的记录棋局信息的字符串,则根据该信息生成棋盘对象
+   
+    /**
+     * 如果输入的字符串是合法的记录棋局信息的字符串,则根据该
+     * 信息生成棋盘对象
+     * <p>其中{@code string}是传入的记录有棋局信息的字符串，
+     * {@code size}指定生成的棋盘的大小
+     */
     public static ChessBoard valueOf(String string,int size) throws Exception{
         //取出两个整数
         ChessBoard chessBoard=new ChessBoard(size);
@@ -389,6 +411,87 @@ public class ChessBoard extends JPanel{
         return chessBoard;
     }
 
+    
+
+
+
+    //把棋盘自身改变成这个值
+    public void changeTo(String string,int size) throws Exception{
+        //先初始化棋盘
+        initBoard();
+        //然后按照信息要求转化成指定形式
+        //取出两个整数
+        setSize(size);
+        String[] sa=string.split("_");
+
+        //计算需要的long数量
+        int numOfPoints=numOfLines*numOfLines;
+        int pointsPerLong=16;
+        int numOfLongs=numOfPoints%pointsPerLong==0?numOfPoints/pointsPerLong:numOfPoints/pointsPerLong+1;
+
+        //比较从字符串中取出的long数量是否符合要求，如果不符合要求
+        if(sa.length!=numOfLongs)
+            throw new Exception("不是合法的棋局字符串");
+        long[] la=new long[numOfLongs];
+        for(int i=0;i<numOfLongs;i++){
+            try {
+                la[i]=Long.valueOf(sa[i]);
+            } catch (Exception e) {
+                throw new Exception("不是合法的棋局信息");
+            }
+        }
+        //根据读取到的字符串来获取棋盘文件
+        int ordOfLa=0; //记录当前使用的long在toS数组中的下标
+        int curSize=0;  //用来记录当前使用的long已经记录的信息的位数
+        int weight=1;  //权重
+        int base=3; //基数
+        try {
+            for(int i=0;i<numOfLines;i++){
+                for(int j=0;j<numOfLines;j++){
+                    int coe=(int)((la[ordOfLa]/weight)%base);
+                    switch(coe){
+                        case 0:
+                            putEmptyPlace(i+1, j+1);
+                        break;
+                        case 1:
+                            putChess(i+1, j+1, BoardComponentColor.BLACK);
+                        break;
+                        case 2:
+                            putChess(i+1, j+1, BoardComponentColor.WHITE);
+                        break;
+                        default:
+                        throw new Exception("不是合法的棋局信息");
+                    }
+                    curSize++;
+                    weight*=base;
+                    //判断当前是否更新到尽头,如果是，启动新的数组
+                    if(curSize==pointsPerLong){
+                        curSize=0;
+                        weight=1;
+                        ordOfLa++;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("不是合法的棋局信息");
+        }
+    }
+
+    //把棋盘自身改变成string对应的棋盘,没有传递size参数则默认保持原来的棋盘大小
+    public void changeTo(String string) throws Exception{
+        //没有传入要改变成的棋盘大小参数size，则默认使用原本的棋盘大小
+        changeTo(string,boardSize);
+    }
+
+    public void changeTo(ChessBoard chessBoard) throws Exception{
+        //改变当前颜色为对应棋盘颜色
+        changeTo(chessBoard.toString());
+        setCurrentColor(chessBoard.getCurrentColor());
+    }
+
+    
+
+
     //获取当前棋盘上能够自由走的位置
     public List<BoardPoint> getAvailablePoints(){
         List<BoardPoint> out=new ArrayList<>();
@@ -407,13 +510,75 @@ public class ChessBoard extends JPanel{
     }
 
     
-
+    //TODO 测试双界面
 
     public static void main(String[] args) throws Exception {
-        String old=new ChessBoard(10).toString();
-        System.out.println(old);
-        ChessBoard chessBoard=ChessBoard.valueOf(old, 10);
-        System.out.println(chessBoard.toString());
+        //测试两个棋盘同步更新
+        // ChessBoard chessBoard=new ChessBoard(1);
+        // chessBoard.clickController.handleClick(new BoardPoint(6, 5));
+        // ChessBoard chessBoard2=new ChessBoard(1);
+        // System.out.println(chessBoard);
+        // System.out.println(chessBoard2);
+        // chessBoard2.changeTo(chessBoard.toString(), 1);
+        // System.out.println(chessBoard2);
+
+        //
+        
+        
+        JFrame jFrame=new JFrame();
+        jFrame.setBounds(100,100,600,600);
+        jFrame.setVisible(true);
+        ChessBoard chessBoard1=new ChessBoard(560);
+        jFrame.add(chessBoard1);
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JFrame jFrame2=new JFrame();
+        jFrame2.setBounds(600,100,600,600);
+        jFrame2.setVisible(true);
+        ChessBoard chessBoard2=new ChessBoard(560);
+        jFrame2.add(chessBoard2);
+        jFrame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        
+       
+        //建立一个内部类，用来对棋盘进行操作
+        class CurPlayer extends HumanPlayer{
+            public CurPlayer(BoardComponentColor playeColor, ChessBoard chessBoard) {
+                super(playeColor, chessBoard);
+                //TODO Auto-generated constructor stub
+            }
+
+            @Override
+            public void singleStep() {
+                // TODO Auto-generated method stub
+                chessBoard.notifyAll();
+                super.singleStep();
+                SwingUtilities.invokeLater(()->{
+                    try {
+                        if(this.chessBoard==chessBoard2){
+                            chessBoard1.changeTo(chessBoard);
+                            System.out.println(chessBoard1.getCurrentColor());
+                            
+                        }
+                        if(this.chessBoard==chessBoard1){
+                            chessBoard2.changeTo(chessBoard);
+                            System.out.println(chessBoard2.getCurrentColor());
+                        }
+                    } catch (Exception e) {
+                        //TODO: handle exception
+                    }
+                });
+            }
+        }
+        Player whitePlayer = new CurPlayer(BoardComponentColor.WHITE, chessBoard1);
+        Player blackPlayer = new CurPlayer(BoardComponentColor.BLACK, chessBoard1);
+        Player whitePlayer2 = new CurPlayer(BoardComponentColor.WHITE, chessBoard2);
+        Player blackPlayer2 = new CurPlayer(BoardComponentColor.BLACK, chessBoard2);
+        whitePlayer.play();
+        blackPlayer.play();
+        whitePlayer2.play();
+        blackPlayer2.play();
+    
     }
 
 }

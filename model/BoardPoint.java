@@ -35,5 +35,25 @@ public class BoardPoint {
         return "["+x+","+y+"]";
     }
 
+    public static BoardPoint valueOf(String s){
+        String term=s.substring(1,4);
+        String[] sa=term.split(",");
+        int x=0;
+        int y=0;
+        try {
+            x=Integer.parseInt(sa[0]);
+            y=Integer.parseInt(sa[1]);
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+        return new BoardPoint(x, y);
+    }
+
+    public static void main(String[] args) {
+        BoardPoint boardPoint=new BoardPoint(1, 2);
+        System.out.println(boardPoint);
+        BoardPoint boardPoint2=BoardPoint.valueOf(boardPoint.toString());
+        System.out.println(boardPoint2);
+    }
 
 }

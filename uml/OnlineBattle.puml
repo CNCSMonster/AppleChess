@@ -1,0 +1,42 @@
+@startuml
+
+class Player{
+    #chessBoard:ChessBoard
+    #playerColor:BoardComponentColor
+    +play():void
+    +stop():void
+    +{abstract}singleStep():void
+}
+
+class AIPlayer{
+    #chessBoard:ChessBoard
+    #playerColor:BoardComponentColor
+    +play():void
+    +stop():void
+    +singleStep():void
+}
+
+class HumanPlayer{
+    #chessBoard:ChessBoard
+    #playerColor:BoardComponentColor
+    +play():void
+    +stop():void
+    +singleStep():void
+}
+
+Player<|--AIPlayer
+Player<|--HumanPlayer
+
+' 该装饰器模式的实例中，LocalPlayer中保存有Player的引用，而且
+' LocalPlayer实现了Player抽象类，而且LocalPlayer与Player还有组合关联关系
+' LocalPlayer作为整体，Player作为局部，离开了内部的PlayerLocalPlayer就
+' 不完整了，因为当装饰器没有装饰的对象的时候就没有了意义，所以他们是整体和局部的关系
+' LocalPlayer中保存的Player引用作为它装饰的对象，是他的一部分，是局部，
+' 而且局部离开整体后能够单独存在，比如AIPlayer,HumanPlayer都能够单独作用，
+' 所以是组合关联，使用空心菱形箭头由部分指向整体
+Player<|--o LocalPlayer
+Player<|-- RemotePlayer
+
+
+
+@enduml
