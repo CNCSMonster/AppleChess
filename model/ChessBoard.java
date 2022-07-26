@@ -1,4 +1,4 @@
-package controller;
+package model;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -11,11 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import model.BoardComponent;
-import model.BoardComponentColor;
-import model.BoardPoint;
-import model.Chess;
-import model.EmptyPlace;
+import controller.BaseClickController;
+import controller.HumanPlayer;
+import controller.Player;
 
 public class ChessBoard extends JPanel{
 
@@ -48,6 +46,7 @@ public class ChessBoard extends JPanel{
         //初始化棋盘棋子和空格组件
         initEmptyPlace();
         initChess();
+        boardVersions.clear();
         boardVersions.add(toString());  //初始棋局版本为开始时的棋局信息
         repaint();
     }
@@ -88,6 +87,16 @@ public class ChessBoard extends JPanel{
     }
 
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        // TODO Auto-generated method stub
+        super.setEnabled(enabled);
+        for(BoardComponent[] bcs:boardComponents){
+            for(BoardComponent boardComponent:bcs){
+                if(boardComponent!=null) boardComponent.setEnabled(enabled);
+            }
+        }
+    }
 
 
     //初始化棋盘棋子
@@ -288,7 +297,17 @@ public class ChessBoard extends JPanel{
         String curVersion=boardVersions.get(numOfVersions-1);
         String lastVersion=boardVersions.get(numOfVersions-2);
         //把两个棋局信息转化为棋盘比较
-        //TODO 等待优化
+        int[][] curModel=parseChessBoardModel(curVersion);
+        int[][] lastModel=parseChessBoardModel(lastVersion);
+        //如果找到一个位置，上个棋形为空该棋形为非空，则就是要走的那一步的位置
+        for(int i=0;i<numOfLines;i++){
+            for(int j=0;j<numOfLines;j++){
+                if(lastModel[i][j]==0&&curModel[i][j]!=0){
+                    //注意i,j只是行列下标，与实际棋局位置中的行序和列序的数值差1
+                    return new BoardPoint(i+1, j+1);
+                }
+            }
+        }
         return null;
     }
 

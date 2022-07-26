@@ -1,8 +1,8 @@
 package aistrategy;
 
-import controller.ChessBoard;
 import model.BoardComponent;
 import model.BoardPoint;
+import model.ChessBoard;
 
 public interface AIStrategy {
 

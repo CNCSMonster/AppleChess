@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutionException;
 
 import model.BoardComponentColor;
 import model.BoardPoint;
+import model.ChessBoard;
 
 public class RemotePlayer extends Player{
     private Socket socket;
@@ -26,15 +27,8 @@ public class RemotePlayer extends Player{
         this.socket=socket;
     }
 
-
-    public RemotePlayer(BoardComponentColor playerColor, ChessBoard chessBoard) {
-        super(playerColor, chessBoard);
-        //TODO Auto-generated constructor stub
-    }
-
     @Override
     public void singleStep() {
-        // TODO Auto-generated method stub
         try {
             //远程玩家下棋的时候禁止本地人类玩家操作，尤其是通过点击事件操作
             //通过对chessBoard的锁禁止本地的电脑玩家操作
@@ -43,11 +37,14 @@ public class RemotePlayer extends Player{
             InputStreamReader ipsr=new InputStreamReader(inputStream);
             BufferedReader bfr=new BufferedReader(ipsr);
             String s=bfr.readLine();
+            System.out.println("remote play"+s);
             BoardPoint boardPoint=BoardPoint.valueOf(s);
             controller.handleClick(boardPoint);
-            socket.shutdownInput();
+            // socket.shutdownInput();
+
         } catch (Exception e) {
             //
+            System.out.println("wrong in remote play");
         }
     }
     

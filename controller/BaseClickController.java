@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import model.BoardPoint;
+import model.ChessBoard;
 
 
 /*
@@ -31,14 +32,20 @@ public class BaseClickController {
         if (boardPoints == null || boardPoints.size() == 0) {
             return;
         }
-        // 否则，下棋
+        // 否则，下棋，并增加新的棋形信息
+        // System.out.println("下棋前棋步为:");
+        // System.out.println(chessBoard.lastStep());
         chessBoard.putChess(boardPoint.getX(), boardPoint.getY(), chessBoard.getCurrentColor());
+        String string=chessBoard.toString();
+        chessBoard.addVersion(string);
+        // System.out.println("下棋后棋步为:");
+        // System.out.println(chessBoard.lastStep());
         for (BoardPoint boardPoint2 : boardPoints) {
             if (boardPoint2 != null)
                 chessBoard.putChess(boardPoint2.getX(), boardPoint2.getY(), chessBoard.getCurrentColor());
         }
         chessBoard.repaint(); // 操作完之后重绘制
-        chessBoard.swapCurrentColor();
+        chessBoard.swapCurrentColor();  //操作完之后修改颜色
         // 每次下棋后判断是否游戏结束!
         // 如果游戏结束了，判断得分和胜负
         if (chessBoard.isGameOver()) {
@@ -68,6 +75,7 @@ public class BaseClickController {
             toShow += ",轮到" + chessBoard.getCurrentColor() + "下棋!";
             JOptionPane.showMessageDialog(chessBoard, toShow);
         }
+        System.out.println("current Color:"+chessBoard.getCurrentColor());
     }
 
 

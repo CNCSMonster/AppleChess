@@ -8,10 +8,10 @@ import aistrategy.LocationFirstStrategy;
 import aistrategy.RandomStrategy;
 import aistrategy.SwapFirstStrategy;
 import controller.AIPlayer;
-import controller.ChessBoard;
 import controller.HumanPlayer;
 import controller.Player;
 import model.BoardComponentColor;
+import model.ChessBoard;
 
 class Main extends JFrame{
     BoardComponentColor whiteColor=BoardComponentColor.WHITE;
@@ -20,11 +20,16 @@ class Main extends JFrame{
 
     public Main(){
         setBounds(100,100,700,700);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ChessBoard chessBoard=new ChessBoard(560);
+        // chessBoard.setEnabled(false);
         Player whitePlayer=new AIPlayer(whiteColor, chessBoard,new LocationFirstStrategy());
         Player blackPlayer=new HumanPlayer(blackColor, chessBoard);
         whitePlayer.play();
         blackPlayer.play();
+
+
+
         // setLayout(null);
         add(chessBoard);
         setVisible(true);

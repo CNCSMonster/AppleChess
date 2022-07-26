@@ -1,6 +1,6 @@
 import java.lang.reflect.Method;
 
-import controller.ChessBoard;
+import model.ChessBoard;
 
 public class CheckMethodOfClass {
     

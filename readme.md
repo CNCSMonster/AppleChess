@@ -54,6 +54,32 @@
 
    其中LocalPlayer作为AIPlayer和HumanPlayer的装饰器，在内部保存这两个类之一的一个引用，在自身的singleStep方法中，调用被装饰类对象的singleStep方法，并添加向远程发送信息的装饰代码。
 
+4. 设置棋盘不能够接受点击事件防止本地连续两次点击。
+
+   棋盘是JPanel面板，棋件是JButton组件。棋件包含入棋盘中后，棋盘用setEnable设置enabled为FALSE，棋件的enabled却不会随之变化，需要重写棋盘的setEnabled方法。
+
+   并且需要注意的是，像JButton这样的轻量级组件，就算设置了enabled为false，同样会接受用户的点击等事件输入，不过不会处理而已，但是我们重写了组件的事件处理方法的时候可能会在原本是否处理的条件判断的范围之外，所以我们可能要增加根据enabled的条件判断。
+
+   下面是setEnabled的源代码注释文件
+
+   ```java
+   Sets whether or not this component is enabled. 
+   A component that is enabled may respond to user input, 
+   while a component that is not enabled cannot respond to 
+   user input.Some components may alter their visual 
+   representation when they are disabled in order to provide 
+   feedback to the user that they cannot take input.
+   
+   Note: Disabling a component does not disable its children.
+   
+   Note: Disabling a lightweight component does not prevent 
+   it from receiving MouseEvents.
+   ```
+
+5. 处理玩家线程之间对棋盘资源的竞争与共享。
+
+   需要实现:一方棋手在下棋时，另一方棋手不能下棋，二，本地棋手下棋时，远程棋手不能下棋。
+
 #### 进度
 
 1. 2022/7/2，完成双人对战走棋逻辑
