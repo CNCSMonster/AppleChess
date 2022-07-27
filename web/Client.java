@@ -18,7 +18,7 @@ public class Client {
 
     public static void main(String[] args) {
         try (//两边都需要一个棋盘显示
-        Socket socket = new Socket("localhost",666))
+        Socket socket = new Socket("192.168.56.1",666))
          {  
             ChessBoard chessBoard=new ChessBoard(560);
             JFrame jFrame=new JFrame();
